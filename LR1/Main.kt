@@ -7,4 +7,6 @@ fun main() {
     students.add(Student("Городецкий","Эдуард","Романович", phoneNumber = "+78005553535"));
     students.add(Student(hashMapOf(Pair("name","Владислав"),Pair("surname","Романов"),Pair("patronymic","Витальевич"))));
     students.forEach { it: Student -> println(it) };
+    println(Student(hashMapOf(Pair("name","Владислав"),Pair("surname","Романов"),Pair("patronymic","Витальевич"))).validate())
+    println(Student("Лермонтов","Михаил","Юрьевич", email = "literature@gmail.com", gitHub = "famous007").validate());
 }

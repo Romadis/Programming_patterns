@@ -39,6 +39,12 @@ data class Student(
             { "Git должен быть действительным" }
         );
     }
+    fun gitExist() = this.gitHub!=null
+
+    fun contactExist() = this.email!=null || this.telegram!=null || this.phoneNumber!=null;
+
+    fun validate() = this.gitExist() && this.contactExist();
+
     companion object{
         var classId:Int = 0;
         fun autoGenerateId():Int{
