@@ -7,5 +7,6 @@ fun main() {
     students.add(Student("Абрамов","Иван","Дмитриевич"));
     students.add(Student("Гонтарев","Александр","Дмитриевич"));
     students.add(Student("Попов","Иван","Викторович"));
+    students.add(Student(hashMapOf(Pair("name", "Владислав"), Pair("surname", "Романов"), Pair("patronymic", "Витальевич"))));
     students.forEach { it: Student -> println(it) };
 }
