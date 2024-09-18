@@ -9,4 +9,8 @@ fun main() {
     students.forEach { it: Student -> println(it) };
     println(Student(hashMapOf(Pair("name","Владислав"),Pair("surname","Романов"),Pair("patronymic","Витальевич"))).validate())
     println(Student("Лермонтов","Михаил","Юрьевич", email = "literature@gmail.com", gitHub = "famous007").validate());
+
+    val stud = Student("Лермонтов","Михаил","Юрьевич", email = "literature@gmail.com", gitHub = "famous007", phoneNumber = "+79186916942");
+    stud.setContacts(hashMapOf(Pair("email","literature@gmail.com"),Pair("telegram","@miha999"),Pair("gitHub",null)));
+    println(stud)
 }
