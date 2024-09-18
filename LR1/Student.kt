@@ -86,39 +86,40 @@ data class Student(
     }
 
     companion object{
-        var classId:Int = 0
-        fun autoGenerateId():Int{
+        private var classId:Int = 0
+        private fun autoGenerateId():Int{
             classId+=1
             return classId
         }
-        fun isValidPhone(phone: String?): Boolean {
+        private fun isValidPhone(phone: String?): Boolean {
             return phone?.matches(Regex("\\+7\\d{10}")) ?: true
         }
 
-        fun isValidSurname(surname: String): Boolean {
+        private fun isValidSurname(surname: String): Boolean {
             return surname.matches(Regex("^[А-Я][а-я]*(-([А-Яа-я]?)[а-я]*)*$"))
         }
 
-        fun isValidName(name: String): Boolean {
+        private fun isValidName(name: String): Boolean {
             return name.matches(Regex("^[А-Я][а-я]*(-([А-Яа-я]?)[а-я]*)*$"))
         }
 
-        fun isValidPatronymic(patronymic: String): Boolean {
+        private fun isValidPatronymic(patronymic: String): Boolean {
             return patronymic.matches(Regex("^[А-Я][а-я]*(-([А-Яа-я]?)[а-я]*)*$"))
         }
 
-        fun isValidTelegram(telegram: String?): Boolean {
+        private fun isValidTelegram(telegram: String?): Boolean {
             return telegram?.matches(Regex("@(?=.{5,64})(?!_)(?!.*__)[a-zA-Z0-9_]+(?<![_.])")) ?: true
         }
 
-        fun isValidEmail(email: String?): Boolean {
+        private fun isValidEmail(email: String?): Boolean {
             return email?.matches(Regex("^[a-zA-Z][a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,}$")) ?: true
         }
 
-        fun isValidGitHub(gitHub: String?): Boolean {
+        private fun isValidGitHub(gitHub: String?): Boolean {
             return gitHub?.let { !Regex("[$%#@&/?]").matches(it) } ?: true
         }
     }
+
     constructor(studentArgs: HashMap<String,Any?>) : this(
         surname = studentArgs["surname"].toString(),
         name = studentArgs["name"].toString(),
