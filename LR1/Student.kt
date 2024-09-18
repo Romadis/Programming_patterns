@@ -1,44 +1,85 @@
-data class Student(
-    private var surname:String,
-    private var name:String,
-    private var patronymic:String,
-    private var id:Int= autoGenerateId(),
-    private var phoneNumber:String?=null,
-    private var telegram:String?=null,
-    private var email:String?=null,
-    private var gitHub:String?=null
+import kotlin.reflect.KFunction1
+
+class Student(
+    surnameValue: String,
+    nameValue: String,
+    patronymicValue: String,
+    phoneNumberValue: String?=null,
+    telegramValue: String?=null,
+    emailValue: String?=null,
+    gitHubValue: String?=null
 )
 {
+    var surname:String=surnameValue
+        set(value:String) {
+            validatorSurname(value)
+            field = value;
+        };
+    var name:String=nameValue
+        set(value:String) {
+            validatorName(value)
+            field = value;
+        };
+    var patronymic:String=patronymicValue
+        set(value:String) {
+            validatorPatronymic(value)
+            field = value;
+        };
+    var id:Int= autoGenerateId();
+    var phoneNumber:String?=phoneNumberValue
+        set(value:String?) {
+            if(this.checkValueAndPropertyNotNull(value,field)) {
+                validatorPhoneNumber(value)
+                field = value;
+            }
+        };
+    var telegram:String?=telegramValue
+        set(value:String?) {
+            if(this.checkValueAndPropertyNotNull(value,field)) {
+                validatorTelegram(value)
+                field = value;
+            }
+        };
+    var email:String?=emailValue
+        set(value:String?) {
+            if(this.checkValueAndPropertyNotNull(value,field)) {
+                validatorEmail(email)
+                field = value;
+            }
+        };
+    var gitHub:String?=gitHubValue
+        set(value:String?) {
+            if(this.checkValueAndPropertyNotNull(value,field)) {
+                validatorGit(value)
+                field = value;
+            }
+        };
     init {
-        require(
-            isValidSurname(this.surname),
-            { "Фамилия должна быть действительной" }
-        )
-        require(
-            isValidName(this.name),
-            { "Имя должно быть действительным" }
-        )
-        require(
-            isValidPatronymic(this.patronymic),
-            { "Отчество должно быть действительным" }
-        )
-        require(
-            isValidPhone(this.phoneNumber),
-            { "Номер телефона должен быть действительным" }
-        )
-        require(
-            isValidTelegram(this.telegram),
-            { "Телеграм должен быть действительным" }
-        )
-        require(
-            isValidEmail(this.email),
-            { "Адрес электронной почты должен быть действительным" }
-        )
-        require(
-            isValidGitHub(this.gitHub),
-            { "Git должен быть действительным" }
-        )
+        validatorSurname(this.surname)
+        validatorName(this.name)
+        validatorPatronymic(this.patronymic)
+        validatorPhoneNumber(this.phoneNumber)
+        validatorTelegram(this.telegram)
+        validatorEmail(this.email)
+        validatorGit(this.gitHub);
     }
+
+    private fun <T>validatorFunc(value:T, errorMessage:String, valudatorFunction: KFunction1<T, Boolean>){
+        require(valudatorFunction(value)) { errorMessage }
+    }
+    private fun validatorGit(gitHub: String?) = validatorFunc(gitHub,"Git должен быть действительным",::isValidGitHub)
+
+    private fun validatorEmail(email: String?) = validatorFunc(email,"Почта должна быть действительной",::isValidEmail)
+
+    private fun validatorPhoneNumber(phone: String?) = validatorFunc(phone, "Номер телефона должен быть действительным",::isValidPhone)
+
+    private fun validatorTelegram(telegram: String?) = validatorFunc(telegram, "Телеграм должен быть действительным",::isValidTelegram)
+
+    private fun validatorSurname(surname: String) = validatorFunc(surname, "Фамилия должна быть действительной",::isValidSurname)
+
+    private fun validatorName(name: String) = validatorFunc(name, "Имя должно быть действительным",::isValidName)
+
+    private fun validatorPatronymic(patronymic: String) = validatorFunc(patronymic, "Отчество должно быть действительным",::isValidPatronymic)
 
     private fun gitExist() = this.gitHub!=null
 
@@ -46,44 +87,13 @@ data class Student(
 
     fun validate() = this.gitExist() && this.contactExist()
 
-    //Метод set_contacts
-    private fun checkValueAndPropertyNotNull(value:String?,propertyValue:String?) = value==null && propertyValue!=null || value!=null
-    private fun contactSetter(value: String?,propertyValue: String?,setter:(value: String?)->(Unit)){
-        if(this.checkValueAndPropertyNotNull(value,propertyValue)){
-            setter(value)
-        }
-    }
-
-    private fun phoneSetter(value: String?) {
-        require(isValidPhone(value))
-        this.phoneNumber = value
-    }
-    private fun setPhoneNumber(value:String?) = this.contactSetter(value, this.phoneNumber) { this.phoneSetter(it) }
-
-    private fun telegramSetter(value: String?) {
-        require(isValidTelegram(value))
-        this.telegram = value
-    }
-    private fun setTelegram(value:String?) = this.contactSetter(value,this.telegram,this::telegramSetter)
-
-    private fun emailSetter(value: String?) {
-        require(isValidEmail(value))
-        this.email = value
-    }
-    private fun setEmail(value:String?) = this.contactSetter(value,this.email,this::emailSetter)
-
-    private fun gitSetter(value: String?) {
-        require(isValidGitHub(value))
-        this.gitHub = value
-    }
-    private fun setGit(value:String?) = this.contactSetter(value,this.gitHub,this::gitSetter);
-
     fun setContacts(contacts:HashMap<String,String?>){
-        this.setPhoneNumber(contacts.getOrDefault("phoneNumber",this.phoneNumber))
-        this.setGit(contacts.getOrDefault("gitHub",this.gitHub))
-        this.setEmail(contacts.getOrDefault("email",this.email))
-        this.setTelegram(contacts.getOrDefault("telegram",this.telegram))
+        this.phoneNumber = contacts.getOrDefault("phoneNumber",this.phoneNumber);
+        this.gitHub = contacts.getOrDefault("gitHub",this.gitHub);
+        this.email = contacts.getOrDefault("email",this.email)
+        this.telegram = contacts.getOrDefault("telegram",this.telegram);
     }
+    private fun checkValueAndPropertyNotNull(value:String?,propertyValue:String?) = value==null && propertyValue!=null || value!=null
 
     companion object{
         private var classId:Int = 0
@@ -121,11 +131,15 @@ data class Student(
     }
 
     constructor(studentArgs: HashMap<String,Any?>) : this(
-        surname = studentArgs["surname"].toString(),
-        name = studentArgs["name"].toString(),
-        patronymic = studentArgs["patronymic"].toString(),
-        phoneNumber = studentArgs.getOrDefault("phoneNumber",null) as String?,
-        telegram = studentArgs.getOrDefault("telegram",null) as String?,
-        email = studentArgs.getOrDefault("email",null) as String?,
-        gitHub = studentArgs.getOrDefault("gitHub",null) as String?)
+        surnameValue = studentArgs["surname"].toString(),
+        nameValue = studentArgs["name"].toString(),
+        patronymicValue = studentArgs["patronymic"].toString(),
+        phoneNumberValue = studentArgs.getOrDefault("phoneNumber",null) as String?,
+        telegramValue = studentArgs.getOrDefault("telegram",null) as String?,
+        emailValue = studentArgs.getOrDefault("email",null) as String?,
+        gitHubValue = studentArgs.getOrDefault("gitHub",null) as String?)
+
+    override fun toString(): String {
+        return "Student(id:${this.id},surname:${this.surname},name:${this.name},patronymic:${this.patronymic},phoneNumber:${this.phoneNumber},email:${this.email},telegram:${this.telegram},gitHub:${this.gitHub}"
+    }
 }
