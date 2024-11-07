@@ -4,7 +4,7 @@ class Student(
     surnameValue: String,
     nameValue: String,
     patronymicValue: String,
-    idValue:Int? = null,
+    idValue:Int = autoGenerateId(),
     phoneNumberValue: String?=null,
     telegramValue: String?=null,
     emailValue: String?=null,
@@ -53,14 +53,9 @@ class Student(
                 field = value;
             }
         };
-    var id:Int? = idValue
-        set(value:Int?){
-            if(!isValidId(value)){
-                field = autoGenerateId()
-            }
-            else{
-                field = value
-            }
+    var id:Int= idValue
+        set(value:Int){
+            field = value
             setMaxId(value)
         }
     init {
@@ -165,6 +160,7 @@ class Student(
                     hashData.set(key,if(propertyVal=="") null else propertyVal);
                 }
             }
+            println(hashData.getOrDefault("id",null).toString().toIntOrNull()==null)
             return hashData
         }
         private fun formatPropertyOutput(propertyName:String,propertyValue: Any?) = if(propertyValue==null) "${propertyName}:" else "${propertyName}:${propertyValue}"
@@ -174,7 +170,7 @@ class Student(
         surnameValue     = studentArgs["surname"].toString(),
         nameValue        = studentArgs["name"].toString(),
         patronymicValue  = studentArgs["patronymic"].toString(),
-        idValue          = studentArgs.getOrDefault("id",null).toString().toIntOrNull(),
+        idValue         = if(studentArgs.getOrDefault("id",null).toString().toIntOrNull()==null) autoGenerateId() else (studentArgs["id"].toString().toInt()),
         phoneNumberValue = studentArgs.getOrDefault("phoneNumber",null) as String?,
         telegramValue    = studentArgs.getOrDefault("telegram",null) as String?,
         emailValue       = studentArgs.getOrDefault("email",null) as String?,
@@ -202,16 +198,19 @@ class Student(
     }
 
     //Краткая информация о студенте
-    private fun getInitials() = "${this.surname} ${this.name[0].plus(".")} ${this.patronymic[0].plus(".")}"
-    private fun getOneContact() =
+    fun getInitials() = "${this.surname} ${this.name[0].plus(".")} ${this.patronymic[0].plus(".")}"
+    fun getOneContact() =
         when{
             this.phoneNumber!=null -> hashMapOf("phoneNumber" to this.phoneNumber)
             this.telegram!=null -> hashMapOf("telegram" to this.telegram)
             this.email!=null -> hashMapOf("email" to this.email)
             else -> null
         }
-    fun getInfo():String{
+    private fun getFormattedContactShort():String{
         val contact = getOneContact()
-        return "Initials:${this.getInitials()} Contact: ${contact?.keys?.first()}:${contact?.values?.first()}"
+        return if(contact?.keys!=null)formatPropertyOutput(contact.keys.first() as String,contact.values.first()) else ""
+    }
+    fun getInfo():String{
+        return "Initials:${this.getInitials()}, ${formatPropertyOutput("gitHub",this.gitHub)}, Contact: ${getFormattedContactShort()}"
     }
 }
