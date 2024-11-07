@@ -200,4 +200,18 @@ class Student(
         }
         return resultString.dropLast(1).plus(")")
     }
+
+    //Краткая информация о студенте
+    private fun getInitials() = "${this.surname} ${this.name[0].plus(".")} ${this.patronymic[0].plus(".")}"
+    private fun getOneContact() =
+        when{
+            this.phoneNumber!=null -> hashMapOf("phoneNumber" to this.phoneNumber)
+            this.telegram!=null -> hashMapOf("telegram" to this.telegram)
+            this.email!=null -> hashMapOf("email" to this.email)
+            else -> null
+        }
+    fun getInfo():String{
+        val contact = getOneContact()
+        return "Initials:${this.getInitials()} Contact: ${contact?.keys?.first()}:${contact?.values?.first()}"
+    }
 }

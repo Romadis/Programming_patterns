@@ -22,5 +22,6 @@ fun main() {
     val data = Student.parseString("Student(id:1,surname:Lermontov,name:Mihail,patronymic:Yurevich,phoneNumber:+79186916942,email:literature@gmail.com,telegram:,gitHub:famous007)")
     println(data)
     println(Student(data))
+    println(stud.getInfo())
 }
 
