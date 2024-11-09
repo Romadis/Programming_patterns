@@ -1,4 +1,6 @@
 package org.example
+
+import DataTable
 import Student
 
 fun main() {
@@ -28,5 +30,9 @@ fun main() {
 //    println(StudentShort(4,Student("Lermontov","Mihail","Yurevich", gitHubValue = "famous007", telegramValue = "@poetishka").getInfo()))
 //    println(StudentShort(stud))
     Student.writeToTxt("src/","out.txt",Student.readFromTxt("src/test.txt"))
+    var dat = DataTable(arrayOf(arrayOf(Student("Romanov","Vladislav","Vitalevich"),3),arrayOf(4,3)))
+    var ar = dat.getElement(0,0) as Student
+    ar.telegram = "@romadis"
+    println(dat.getElement(0,0))
 }
 
