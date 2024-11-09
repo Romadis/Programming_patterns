@@ -12,6 +12,16 @@ class DataTable(private val data: Array<Array<Any?>>) {
     fun getRowCount(): Int {
         return data.size
     }
+    override fun toString(): String {
+        var resultString = ""
+        for(i in 0..<this.data.size){
+            for(j in 0..<this.data[0].size){
+                resultString = resultString.plus("${this.getElement(i,j)} ")
+            }
+            resultString = resultString.plus("\n")
+        }
+        return resultString
+    }
 }
 // Функция для создания копии элемента (если это возможно)
 fun <T> T.copyIfPossible(): T {

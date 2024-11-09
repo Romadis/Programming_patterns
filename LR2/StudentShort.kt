@@ -50,11 +50,12 @@ class StudentShort: StudentBase {
             return null;
         }
         private fun validateSurnameInitials(value:String?):String{
-            if(value==null) throw Exception("Неверно введены инициалы и фамилия")
+            if(value==null) throw Exception("Неверно введено ФИО")
             return value;
         }
+        fun returnPropertyNames() = StudentShort(-1,"Initials:A A.A., gitHub:, Contact:").propertiesReturn().keys
     }
-    //Стуктурированный вывод
+    // Структурированный вывод
     override fun propertiesReturn():Map<String,Any?> =
         mapOf(
             "id" to this.id,
