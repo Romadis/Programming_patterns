@@ -15,11 +15,11 @@ open class DataList<T>(val elements: Array<T>) {
     fun getSelectedIds() = selectedIndices.toIntArray()
 
     // Получение массива наименований атрибутов
-    open fun functionGetPropsNames() = if(this.elements.isEmpty()) arrayOf() else this.elements[0]!!::class.memberProperties.map{it.name}.toTypedArray<String>()
+    protected open fun functionGetPropsNames() = if(this.elements.isEmpty()) arrayOf() else this.elements[0]!!::class.memberProperties.map{it.name}.toTypedArray<String>()
     fun getNames(): Array<String> = functionGetPropsNames()
 
     // Получение DataTable
-    open fun getPropertiesOfClass(value:T):List<Any?> = arrayOf("12",2).toList()
+    protected open fun getPropertiesOfClass(value:T):List<Any?> = arrayOf("12",2).toList()
     fun getData(): DataTable {
         val dataList:MutableList<Array<Any?>> = mutableListOf()
         var rowNumber = 0;
