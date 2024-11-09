@@ -1,7 +1,6 @@
 import kotlin.math.max
 
-abstract class StudentBase(idValue: Int = autoGenerateId(), open val gitHub: String?=null) {
-    open val id:Int = idValue
+abstract class StudentBase(open val id:Int = autoGenerateId(), open val gitHub: String?=null) {
     abstract fun propertiesReturn():Map<String,Any?>
     init {
         StudentValidator.validatorGit(this.gitHub)

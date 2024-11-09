@@ -1,0 +1,6 @@
+Student(id:0,surname:Romanov,name:Vladislav,patronymic:Vitalevich,phoneNumber:,email:,telegram:,gitHub:)
+Student(id:1,surname:Shiyan,name:Valeriy,patronymic:Igorevich,phoneNumber:,email:,telegram:@Shiyanchik777,gitHub:)
+Student(id:2,surname:Gorodetsky,name:Eduard,patronymic:Romanovich,phoneNumber:,email:,telegram:,gitHub:imba123)
+Student(id:3,surname:Zhuk,name:Arseniy,patronymic:Sergeevich,phoneNumber:,email:zhuk@gmail.com,telegram:,gitHub:)
+Student(id:4,surname:Kramarenko,name:Andrey,patronymic:Alexandrovich,phoneNumber:+78005553535,email:,telegram:,gitHub:)
+Student(id:5,surname:Rudenko,name:Olga,patronymic:Valentinovna,phoneNumber:,email:,telegram:,gitHub:)
