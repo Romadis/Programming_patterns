@@ -1,0 +1,4 @@
+2;Романов;Владислав;Витальевич;+79186930055;@romadis;vladcool155@gmail.com;https://github.com/Romadis
+4;Максюта;Станислав;Витальевич;+79095883397;@Stasik777;geroy@mail.ru;https://github.com/Stanislavsky
+1;Городецкий;Эдуард;Романович;+78005553535;@edgorod;gorodok777@mail.ru;https://github.com/edgorod
+3;Лапина;Ольга;Николаевна;+79092779840;;;https://github.com/Lapina
