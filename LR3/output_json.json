@@ -1,0 +1,52 @@
+[
+  {
+    "id": 5,
+    "lastName": "Городецкий",
+    "firstName": "Эдуард",
+    "middleName": "Романович",
+    "phone": "+78005553535",
+    "telegram": "",
+    "email": "",
+    "git": "https://github.com/Edgorod777"
+  },
+  {
+    "id": 4,
+    "lastName": "Кривич",
+    "firstName": "Анастасия",
+    "middleName": "Михайловна",
+    "phone": "+79183995308",
+    "telegram": "@mihailovna",
+    "email": "nastyusha777@mail.ru",
+    "git": "https://github.com/Krivich"
+  },
+  {
+    "id": 2,
+    "lastName": "Максюта",
+    "firstName": "Станислав",
+    "middleName": "Витальевич",
+    "phone": "+79097884307",
+    "telegram": "@stanislavsky",
+    "email": "stasik777@gmail.com",
+    "git": "https://github.com/Stanislavsky"
+  },
+  {
+    "id": 1,
+    "lastName": "Романов",
+    "firstName": "Владислав",
+    "middleName": "Витальевич",
+    "phone": "+79186916943",
+    "telegram": "@romadis",
+    "email": "vladcool155@mail.ru",
+    "git": "https://github.com/Romadis"
+  },
+  {
+    "id": 3,
+    "lastName": "Харисов",
+    "firstName": "Артур",
+    "middleName": "Марселевич",
+    "phone": "",
+    "telegram": "@artKV",
+    "email": "",
+    "git": "https://github.com/ArtKV1"
+  }
+]
