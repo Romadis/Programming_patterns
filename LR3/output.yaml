@@ -1,0 +1,46 @@
+---
+- id: 5
+  lastName: "Городецкий"
+  firstName: "Эдуард"
+  middleName: "Романович"
+  phone: "+78005553535"
+  telegram: ""
+  email: ""
+  git: "https://github.com/Edgorod777"
+  info: "Инициаллы:Городецкий Э.Р.; Git:https://github.com/Edgorod777; Контакт:Telegram_"
+- id: 4
+  lastName: "Кривич"
+  firstName: "Анастасия"
+  middleName: "Михайловна"
+  phone: "+79183995308"
+  telegram: "@mihailovna"
+  email: "nastyusha777@mail.ru"
+  git: "https://github.com/Krivich"
+  info: "Инициаллы:Кривич А.М.; Git:https://github.com/Krivich; Контакт:Telegram_@mihailovna"
+- id: 2
+  lastName: "Максюта"
+  firstName: "Станислав"
+  middleName: "Витальевич"
+  phone: "+79097884307"
+  telegram: "@stanislavsky"
+  email: "stasik777@gmail.com"
+  git: "https://github.com/Stanislavsky"
+  info: "Инициаллы:Максюта С.В.; Git:https://github.com/Stanislavsky; Контакт:Telegram_@stanislavsky"
+- id: 1
+  lastName: "Романов"
+  firstName: "Владислав"
+  middleName: "Витальевич"
+  phone: "+79186916943"
+  telegram: "@romadis"
+  email: "vladcool155@mail.ru"
+  git: "https://github.com/Romadis"
+  info: "Инициаллы:Романов В.В.; Git:https://github.com/Romadis; Контакт:Telegram_@romadis"
+- id: 3
+  lastName: "Романов"
+  firstName: "Владислав"
+  middleName: "Витальевич"
+  phone: "+79186916943"
+  telegram: null
+  email: null
+  git: "https://github.com/Romadis"
+  info: "Инициаллы:Романов В.В.; Git:https://github.com/Romadis; Контакт:Phone_+79186916943"

@@ -17,29 +17,48 @@ fun main() {
 //    studentsFromFile.replaceStudentById(3, student6)
 //    println(Student.students.toString())
 //
-//    studentsFromFile.writeToFile()
+//    studentsFromFile.write_to_txt()
 //
 //    studentsFromFile.removeStudentById(3)
 //    println(Student.students.toString())
+
+//    val json = "student_json.json"
+//    val studentsFromFileJSON = Students_list_JSON(json)
 //
-      val json = "student_json.json"
-      val studentsFromFileJSON = Students_list_JSON(json)
+//    println(studentsFromFileJSON.getStudent())
+//    println(studentsFromFileJSON.getStudentShortCount())
+//
+//    studentsFromFileJSON.sortStudents()
+//    println(studentsFromFileJSON.getStudent())
+//
+//    studentsFromFileJSON.getStudentById(1)
+//
+//    val student6 = Student(6,"Романов","Владислав","Витальевич", phone = "+79186916943", git="https://github.com/Romadis")
+//    studentsFromFileJSON.replaceStudentById(3, student6)
+//    println(studentsFromFileJSON.getStudent())
+//
+//    studentsFromFileJSON.writeToJson()
+//
+//    studentsFromFileJSON.removeStudentById(3)
+//    println(studentsFromFileJSON.getStudent())
 
-      println(studentsFromFileJSON.getStudent())
-      println(studentsFromFileJSON.getStudentShortCount())
+    val yaml = "student_yaml.yaml"
+    val studentsFromFileYAML = Students_list_YAML(yaml)
 
-      studentsFromFileJSON.sortStudents()
-      println(studentsFromFileJSON.getStudent())
+    println(studentsFromFileYAML.getStudent())
+    println(studentsFromFileYAML.getStudentShortCount())
 
-      studentsFromFileJSON.getStudentById(1)
+    studentsFromFileYAML.sortStudents()
+    println(studentsFromFileYAML.getStudent())
 
-      val student6 = Student(6,"Романов","Владислав","Витальевич", phone = "+79186916943", git="https://github.com/Romadis")
-      studentsFromFileJSON.replaceStudentById(3, student6)
-      println(studentsFromFileJSON.getStudent())
+    studentsFromFileYAML.getStudentById(1)
 
-      studentsFromFileJSON.writeToJson()
+    val student6 = Student(6,"Романов","Владислав","Витальевич", phone = "+7986916943", git="https://github.com/Romadis")
+    studentsFromFileYAML.replaceStudentById(3, student6)
+    println(studentsFromFileYAML.getStudent())
 
-      studentsFromFileJSON.removeStudentById(3)
-      println(studentsFromFileJSON.getStudent())
+    studentsFromFileYAML.writeToYaml()
 
+    studentsFromFileYAML.removeStudentById(3)
+    println(studentsFromFileYAML.getStudent())
 }
