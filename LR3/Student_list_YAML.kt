@@ -1,28 +1,27 @@
 package main.src
+import StudentListInterface
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import java.io.File
 
-class Students_list_YAML(filePath: String) : StudentsList(filePath) {
+class Student_list_YAML : StudentListInterface {
     private val objectMapper = ObjectMapper(YAMLFactory())
 
-    // Чтение всех значений из файла
-    override fun readFromFile() {
+    override fun readFromFile(filePath: String): List<Student> {
         val file = File(filePath)
 
         if (!file.exists() || !file.canRead()) {
             throw IllegalArgumentException("Файл недоступен: $filePath")
         }
 
-        students.addAll(objectMapper.readValue(
+        return objectMapper.readValue(
             file,
             objectMapper.typeFactory.constructCollectionType(MutableList::class.java, Student::class.java)
-        ))
+        )
     }
 
-    // Запись всех значений в файл
-    public override fun writeToFile() {
-        val file = File("output.yaml")
+    override fun writeToFile(filePath: String, students: List<Student>) {
+        val file = File(filePath)
         objectMapper.writeValue(file, students)
     }
 }

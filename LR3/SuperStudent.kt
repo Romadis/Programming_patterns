@@ -1,9 +1,7 @@
 package main.src
 import java.io.File
 import java.lang.Exception
-//import kotlinx.serialization.Serializable
 
-//@Serializable
 open class SuperStudent(
     var id: Int,
     var lastName: String,

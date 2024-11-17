@@ -1,10 +1,10 @@
 package main.src
+import StudentListInterface
 import java.io.File
 
-class Students_list_txt(filePath: String) : StudentsList(filePath) {
-
-    // Чтение файла
-    override fun readFromFile() {
+class Student_list_txt : StudentListInterface {
+    override fun readFromFile(filePath: String): List<Student> {
+        val students = mutableListOf<Student>()
         val file = File(filePath)
 
         if (!file.exists() || !file.canRead()) {
@@ -14,18 +14,18 @@ class Students_list_txt(filePath: String) : StudentsList(filePath) {
         file.forEachLine { line ->
             try {
                 val student = Student(line)
-                Student.students.add(student)
+                students.add(student)
             } catch (e: IllegalArgumentException) {
                 println("Ошибка: \"$line\"")
             }
         }
+        return students
     }
 
-    // Запись в файл
-    public override fun writeToFile() {
-        val file = File("output.txt")
+    override fun writeToFile(filePath: String, students: List<Student>) {
+        val file = File(filePath)
         file.bufferedWriter().use { writer ->
-            Student.students.forEach { student ->
+            students.forEach { student ->
                 writer.write(
                     "${student.id};${student.lastName};${student.firstName};${student.middleName ?: ""};" +
                             "${student.phone ?: ""};${student.telegram ?: ""};${student.email ?: ""};${student.git ?: ""}"

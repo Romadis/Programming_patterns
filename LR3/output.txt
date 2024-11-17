@@ -1,4 +1,5 @@
-2;Романов;Владислав;Витальевич;+79186930055;@romadis;vladcool155@gmail.com;https://github.com/Romadis
-4;Максюта;Станислав;Витальевич;+79095883397;@Stasik777;geroy@mail.ru;https://github.com/Stanislavsky
-1;Городецкий;Эдуард;Романович;+78005553535;@edgorod;gorodok777@mail.ru;https://github.com/edgorod
-3;Лапина;Ольга;Николаевна;+79092779840;;;https://github.com/Lapina
+5;Городецкий;Эдуард;Романович;+78005553535;;;https://github.com/Edgorod777
+4;Кривич;Анастасия;Михайловна;+79183995308;@mihailovna;nastyusha777@mail.ru;https://github.com/Krivich
+2;Максюта;Станислав;Витальевич;+79097884307;@stanislavsky;stasik777@gmail.com;https://github.com/Stanislavsky
+1;Романов;Владислав;Витальевич;+79186916943;@romadis;vladcool155@mail.ru;https://github.com/Romadis
+3;Харисов;Артур;Марселевич;;@artKV;;https://github.com/ArtKV1
