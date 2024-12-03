@@ -46,5 +46,13 @@ fun main() {
 //    } catch (e: Exception) {
 //        e.printStackTrace()
 //    }
-    DB.executeSelect()
+//    DB.executeSelect()
+
+      val studentDB = Student_list_DB.getInstance()
+      println(studentDB.getStudentById(2))
+      println(studentDB.getTotalStudents())
+
+      val student = Student(6,"Кривцов","Никита","Сергеевич", telegram = "@nikitka34", git="https://github.com/nik777")
+      studentDB.addStudent(student)
+      println(studentDB.getStudentById(6))
 }
