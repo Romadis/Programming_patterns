@@ -3,47 +3,48 @@ import main.src.StudentListInterface
 import main.src.Student_list_txt
 import main.src.Student_short
 
-class Student_list_txt_adapter(private val txtHandler: Student_list_txt) : StudentListInterface {
+class Students_List_txt_adapter(private val txtInstance: Student_list_txt) : Student_List_Adapter {
     private val students: MutableList<Student> = mutableListOf()
 
     init {
-        loadStudents()
+        students.addAll(txtInstance.readFromFile("students.txt"))
     }
 
-    private fun loadStudents() {
-        students.clear()
-        students.addAll(txtHandler.readFromFile("students.txt"))
+    override fun getStudentById(id: Int): Student? {
+        return students.find { it.id == id }
     }
 
-    private fun saveStudents() {
-        txtHandler.writeToFile("students.txt", students)
+    override fun get_k_n_student_short_list(n: Int, k: Int): Data_list<Student_short> {
+        val startIndex = (n - 1) * k
+        val endIndex = startIndex + k
+        val sublist = students.subList(startIndex, endIndex.coerceAtMost(students.size))
+        return Data_list(sublist.map { Student_short(it) })
     }
 
-    override fun getStudentById(id: Int): Student? = students.find { it.id == id }
-
-    override fun get_k_n_student_short_list(k: Int, n: Int): Data_list<Student_short> {
-        val start = (n - 1) * k
-        val end = start + k
-        val shortList = students.subList(start.coerceAtLeast(0), end.coerceAtMost(students.size))
-            .map { Student_short(it) }
-        return Data_list(shortList)
+    override fun addStudent(student: Student): Int {
+        val newId = (students.maxOfOrNull { it.id } ?: 0) + 1
+        val newStudent = student.copy(id = newId)
+        students.add(newStudent)
+        txtInstance.writeToFile("students.txt", students)
+        return newId
     }
 
-    override fun addStudent(student: Student) {
-        students.add(student)
-        saveStudents()
-    }
-
-    override fun updateStudent(id: Int, student: Student) {
+    override fun replaceStudentById(id: Int, newStudent: Student) {
         val index = students.indexOfFirst { it.id == id }
-        if (index != -1) students[index] = student
-        saveStudents()
+        if (index != -1) {
+            students[index] = newStudent.copy(id = id)
+        } else {
+            addStudent(newStudent)
+        }
+        txtInstance.writeToFile("students.txt", students)
     }
 
-    override fun deleteStudent(id: Int) {
+    override fun removeStudentById(id: Int) {
         students.removeIf { it.id == id }
-        saveStudents()
+        txtInstance.writeToFile("students.txt", students)
     }
 
-    override fun getStudentShortCount(): Int = students.size
+    override fun getStudentShortCount(): Int {
+        return students.size
+    }
 }

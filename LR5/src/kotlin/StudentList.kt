@@ -1,22 +1,28 @@
 import main.src.Student
-import main.src.StudentListInterface
 import main.src.Student_short
 
-class Student_list(private var strategy: StudentListInterface) {
-    fun setStrategy(newStrategy: StudentListInterface) {
-        strategy = newStrategy
+class StudentList(private val adapter: Student_List_Adapter) {
+    fun getStudentById(id: Int): Student? {
+        return adapter.getStudentById(id)
     }
 
-    fun getStudentById(id: Int): Student? = strategy.getStudentById(id)
+    fun get_k_n_student_short_list(n: Int, k: Int): Data_list<Student_short> {
+        return adapter.get_k_n_student_short_list(n, k)
+    }
 
-    fun get_k_n_student_short_list(k: Int, n: Int): Data_list<Student_short> =
-        strategy.get_k_n_student_short_list(k, n)
+    fun addStudent(student: Student): Int {
+        return adapter.addStudent(student)
+    }
 
-    fun addStudent(student: Student) = strategy.addStudent(student)
+    fun replaceStudentById(id: Int, newStudent: Student) {
+        adapter.replaceStudentById(id, newStudent)
+    }
 
-    fun updateStudent(id: Int, student: Student) = strategy.updateStudent(id, student)
+    fun removeStudentById(id: Int) {
+        adapter.removeStudentById(id)
+    }
 
-    fun deleteStudent(id: Int) = strategy.deleteStudent(id)
-
-    fun getStudentShortCount(): Int = strategy.getStudentShortCount()
+    fun getStudentShortCount(): Int {
+        return adapter.getStudentShortCount()
+    }
 }
