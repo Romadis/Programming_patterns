@@ -1,0 +1,182 @@
+package org.romadis.student
+
+import kotlinx.serialization.Serializable
+import org.romadis.exceptions.ValidateException
+import java.sql.ResultSet
+
+@Serializable
+class Student(
+    var id: Int = 0,
+    var lastName: String,
+    var firstName: String,
+    var middleName: String,
+    var telegram: String? = null,
+    var git: String? = null
+): StudentBase() {
+
+    var phone: String? = null
+        get() {
+            return field
+        }
+        set(value) {
+            validatePhone(value)
+            field = value
+        }
+
+    var email: String? = null
+        get() {
+            return field
+        }
+        set(value) {
+            validateEmail(value)
+            field = value
+        }
+
+    companion object {
+        private val PHONE_REGEX = Regex("(?:\\+|\\d)[\\d\\-\\(\\) ]{9,}\\d")
+        private val EMAIL_REGEX = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$")
+
+        fun validatePhone(phoneNumber: String?) {
+            if (!(phoneNumber == null || phoneNumber == "" || PHONE_REGEX.matches(phoneNumber))) {
+                throw ValidateException("Invalid phone number format: $phoneNumber")
+            }
+        }
+
+        fun validateEmail(email: String?) {
+            if (!(email == null || email == "" || EMAIL_REGEX.matches(email))) {
+                throw ValidateException("Invalid email format: $email")
+            }
+        }
+    }
+
+    constructor(
+        id: Int = 0,
+        lastName: String,
+        firstName: String,
+        middleName: String,
+        phone: String? = null,
+        telegram: String? = null,
+        email: String? = null,
+        git: String? = null
+    ) : this(id, lastName, firstName, middleName, telegram, git) {
+        this.email = email
+        this.phone = phone
+    }
+
+    constructor() : this(0, "", "", "")
+
+    constructor(
+        info: Map<String, Any?>
+    ) : this(
+        info.getOrDefault("id", 0) as Int,
+        info["lastName"].toString(),
+        info["firstName"].toString(),
+        info["middleName"].toString(),
+        info.getOrDefault("phone", null) as String?,
+        info.getOrDefault("telegram", null) as String?,
+        info.getOrDefault("email", null) as String?,
+        info.getOrDefault("git", null) as String?
+    )
+
+    constructor(
+        rs: ResultSet
+    ) : this(
+        id = rs.getInt("id").toInt(),
+        lastName = rs.getString("last_name").toString(),
+        firstName = rs.getString("first_name").toString(),
+        middleName = rs.getString("middle_name").toString(),
+        telegram = rs.getString("telegram")?.toString() ?: "",
+        phone = rs.getString("phone")?.toString() ?: "",
+        email = rs.getString("email")?.toString() ?: "",
+        git = rs.getString("git")?.toString() ?: ""
+    )
+
+    constructor(
+        serializedString: String
+    ) : this(0, "", "", "") {
+        val regex =
+            Regex("Student\\(id=([^,]+), firstName=([^,]+), lastName=([^,]+), middleName=([^,]+), phone=([^,]+), telegram=([^,]+), email=([^,]+), git=([^)]*)\\)")
+        val matchResult = regex.find(serializedString)
+
+        if (matchResult != null) {
+            this.id = matchResult.groups[1]?.value?.toInt() ?: 0
+            this.firstName = matchResult.groups[2]?.value ?: ""
+            this.lastName = matchResult.groups[3]?.value ?: ""
+            this.middleName = matchResult.groups[4]?.value ?: ""
+            this.phone = matchResult.groups[5]?.value.let { if (it == null || it == "null") null else it }
+            this.telegram = matchResult.groups[6]?.value.let { if (it == null || it == "null") null else it }
+            this.email = matchResult.groups[7]?.value.let { if (it == null || it == "null") null else it }
+            this.git = matchResult.groups[8]?.value.let { if (it == null || it == "null") null else it }
+
+            if (firstName.isEmpty()) {
+                throw ValidateException("Invalid student string format: firstName is empty!")
+            }
+            if (lastName.isEmpty()) {
+                throw ValidateException("Invalid student string format: lastName is empty!")
+            }
+            if (middleName.isEmpty()) {
+                throw ValidateException("Invalid student string format: middleName is empty!")
+            }
+
+            if (!validate()) {
+                throw ValidateException("Invalid student string format: git or some contact is empty")
+            }
+        } else {
+            throw ValidateException("Invalid student string format: $serializedString")
+        }
+    }
+
+    override fun toString(): String {
+        return "Student(id=$id, firstName=$firstName, lastName=$lastName, middleName=$middleName, phone=$phone, telegram=$telegram, email=$email, git=$git)"
+    }
+
+    fun validate(): Boolean {
+        return this.git?.isNotEmpty() ?: false &&
+                (
+                        this.email?.isNotEmpty() ?: false ||
+                                this.telegram?.isNotEmpty() ?: false ||
+                                this.phone?.isNotEmpty() ?: false
+                        )
+    }
+
+    fun transformEmptyStringsToNull() {
+        if (this.email == "") {
+            this.email = null;
+        }
+        if (this.telegram == "") {
+            this.telegram = null;
+        }
+        if (this.phone == "") {
+            this.phone = null;
+        }
+        if (this.git == "") {
+            this.git = null;
+        }
+    }
+
+    fun set_contacts(email: String?, telegram: String?, phone: String?) {
+
+        if (email != null) {
+            this.email = email;
+        }
+
+        if (telegram != null) {
+            this.telegram = telegram;
+        }
+
+        if (phone != null) {
+            this.phone = phone;
+        }
+    }
+
+    override fun getContactInfo(): String {
+        val telegramContact = if (telegram != null) "Telegram: $telegram;" else ""
+        val phoneContact = if (phone != null) "Phone: $phone;" else ""
+        val emailContact = if (email != null) "Email: $email;" else ""
+
+        return listOf(telegramContact, phoneContact, emailContact).first { it.isNotEmpty() }
+    }
+
+    override fun getLastNameWithInitials(): String = "$lastName ${firstName.first()}. ${middleName.first()}."
+    override fun getGitInfo(): String? = git
+}
