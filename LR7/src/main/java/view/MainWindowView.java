@@ -1,11 +1,9 @@
 package view;
 
-import org.jetbrains.annotations.NotNull;
+import org.romadis.controllers.StudentCreateController;
 import org.romadis.controllers.Student_list_controller;
-import org.romadis.db.exceptions.DbConnectionException;
 import org.romadis.dto.StudentFilter;
 import org.romadis.pattern.student.Data_list_student_short;
-import org.romadis.student.Student;
 import org.romadis.student.Student_short;
 
 import javax.swing.*;
@@ -94,6 +92,13 @@ public class MainWindowView implements ViewInterface {
             int selectedRowCount = table.getSelectedRowCount();
             editButton.setEnabled(selectedRowCount == 1); 
             deleteButton.setEnabled(selectedRowCount > 0); 
+        });
+
+	addButton.addActionListener(e -> {
+        StudentCreateController studentCreateController = new StudentCreateController(this.controller);
+        StudentFormModal modal = new StudentFormModal();
+        modal.controller = studentCreateController;
+        modal.create(null, "Ñîçäàòü íîâóþ çàïèñü");
         });
 
         refreshInfo(tableModel);
