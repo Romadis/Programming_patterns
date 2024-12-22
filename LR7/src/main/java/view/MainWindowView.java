@@ -1,9 +1,11 @@
 package view;
 
 import org.romadis.controllers.StudentCreateController;
+import org.romadis.controllers.StudentUpdateController;
 import org.romadis.controllers.Student_list_controller;
 import org.romadis.dto.StudentFilter;
 import org.romadis.pattern.student.Data_list_student_short;
+import org.romadis.student.Student;
 import org.romadis.student.Student_short;
 
 import javax.swing.*;
@@ -99,6 +101,21 @@ public class MainWindowView implements ViewInterface {
         StudentFormModal modal = new StudentFormModal();
         modal.controller = studentCreateController;
         modal.create(null, "Ñîçäàòü íîâóþ çàïèñü");
+        });
+
+                editButton.addActionListener(e -> {
+            StudentUpdateController studentUpdateController = new StudentUpdateController(this.controller);
+            StudentFormModal modal = new StudentFormModal();
+            modal.controller = studentUpdateController;
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow >= 0) {
+                int id = (int) tableModel.getValueAt(selectedRow, 0);
+                Student student = studentUpdateController.getStudentById(id);
+                if (student == null) {
+                    showError("Update!");
+                }
+                modal.create(student, "Update");
+            }
         });
 
         refreshInfo(tableModel);
