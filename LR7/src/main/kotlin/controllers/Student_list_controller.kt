@@ -8,6 +8,7 @@ import view.MainWindowView
 
 class Student_list_controller(studentSourceData: StudentListInterface, private var view: MainWindowView) {
 
+
     private var studentsList: Student_list = Student_list(studentSourceData);
     private var dataListStudentShort: Data_list_student_short? = null;
 
@@ -15,11 +16,28 @@ class Student_list_controller(studentSourceData: StudentListInterface, private v
         this.view = view
     }
 
-    fun refresh_data(pageSize: Int, page: Int, studentFilter: StudentFilter) {
+    fun firstInitDataList() {
+        val page = 1
+        val pageSize = 20
+        dataListStudentShort = studentsList.getKNStudentShortList(k = pageSize, n = page, studentFilter = null)
+        dataListStudentShort?.pagination?.updatePagination(
+            studentsList.getStudentCount(),
+            page,
+            pageSize
+        )
+        view.setDataList(dataListStudentShort)
+    }
+
+    fun refresh_data(pageSize: Int, page: Int, studentFilter: StudentFilter?) {
         dataListStudentShort = studentsList.getKNStudentShortList(k = pageSize, n = page, studentFilter = studentFilter);
+        dataListStudentShort?.pagination?.updatePagination(
+            studentsList.getStudentCount(),
+            page,
+            pageSize
+        )
         view.setDataList(dataListStudentShort)
         dataListStudentShort?.addObserver(view)
-        dataListStudentShort?.notify()
+        dataListStudentShort?.notifyObservers()
     }
 
 }

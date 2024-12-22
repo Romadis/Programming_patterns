@@ -1,7 +1,11 @@
 package org.romadis.pattern
 
+import org.romadis.db.Pagination
+
 abstract class Data_list<T : Comparable<T>>(protected var elements: List<T>) {
     private val selectedIndices = mutableSetOf<Int>()
+
+    val pagination: Pagination = Pagination()
 
     init {
         elements.sorted()
