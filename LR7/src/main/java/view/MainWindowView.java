@@ -2,6 +2,8 @@ package view;
 
 import org.jetbrains.annotations.NotNull;
 import org.romadis.controllers.Student_list_controller;
+import org.romadis.db.exceptions.DbConnectionException;
+import org.romadis.dto.StudentFilter;
 import org.romadis.pattern.student.Data_list_student_short;
 import org.romadis.student.Student;
 import org.romadis.student.Student_short;
@@ -210,5 +212,11 @@ public class MainWindowView implements ViewInterface {
                     student.getContactInfo(),
             });
         }
+    }
+    public void showError(String message) {
+        JDialog dialog = new JDialog((Frame) null, "Îøèáêà", true);
+        dialog.setSize(400, 300);
+        dialog.setLayout(new GridLayout(7, 2));
+        JOptionPane.showMessageDialog(dialog, "Ïðîèçîøëà íåïðåäâèäåííàÿ îøèáêà: " + message, "Îøèáêà", JOptionPane.ERROR_MESSAGE);
     }
 }
