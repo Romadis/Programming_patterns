@@ -15,6 +15,9 @@ import java.util.List;
 
 public class MainWindowView implements ViewInterface {
 
+    private static final int PAGE_SIZE = 20;
+    private static int currentPage = 1;
+
     private Student_list_controller controller;
 
     public void setController(Student_list_controller controller) {
@@ -31,54 +34,55 @@ public class MainWindowView implements ViewInterface {
 
     private final JTextField nameField = new JTextField();
 
-    private final JComboBox<String> gitComboBox = new JComboBox<>(new String[] { "Не важно", "Да", "Нет" });
+    private final JComboBox<String> gitComboBox = new JComboBox<>(new String[] { "No matter", "Yes", "No" });
     private final JTextField gitField = new JTextField();
 
     private final JTextField emailField = new JTextField();
-    private final JComboBox<String> emailComboBox = new JComboBox<>(new String[] { "Не важно", "Да", "Нет" });
+    private final JComboBox<String> emailComboBox = new JComboBox<>(new String[] { "No matter", "Yes", "No" });
 
     private final JTextField phoneField = new JTextField();
-    private final JComboBox<String> phoneComboBox = new JComboBox<>(new String[] { "Не важно", "Да", "Нет" });
+    private final JComboBox<String> phoneComboBox = new JComboBox<>(new String[] { "No matter", "Yes", "No" });
 
     private final JTextField telegramField = new JTextField();
-    private final JComboBox<String> telegramComboBox = new JComboBox<>(new String[] { "Не важно", "Да", "Нет" });
+    private final JComboBox<String> telegramComboBox = new JComboBox<>(new String[] { "No matter", "Yes", "No" });
 
-    private final JLabel pageInfoLabel = new JLabel("Страница: 1 / ?");
-    private final JButton prevPageButton = new JButton("Предыдущая");
-    private final JButton nextPageButton = new JButton("Следующая");
+    private final JLabel pageInfoLabel = new JLabel("Page: 1 / ?");
+    private final JButton prevPageButton = new JButton("Prev");
+    private final JButton nextPageButton = new JButton("Next");
 
-    private final JButton refreshButton = new JButton("Обновить");
-    private final JButton addButton = new JButton("Добавить");
-    private final JButton editButton = new JButton("Изменить");
-    private final JButton deleteButton = new JButton("Удалить");
+    private final JButton refreshButton = new JButton("Refresh");
+    private final JButton addButton = new JButton("Add");
+    private final JButton editButton = new JButton("Edit");
+    private final JButton deleteButton = new JButton("Delete");
 
-    MainWindowView() {}
+    public MainWindowView() {}
 
     public void create(Student_list_controller controller) {
         setController(controller);
+        controller.firstInitDataList();
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Student Management");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(800, 600);
 
             JTabbedPane tabbedPane = new JTabbedPane();
-            tabbedPane.add("Список студентов", createStudentTab());
+            tabbedPane.add("Adding", createStudentTab());
 
             frame.add(tabbedPane);
             frame.setVisible(true);
+            update();
         });
     }
 
     private JPanel createStudentTab() {
         JPanel panel = new JPanel(new BorderLayout());
-
 //        addFilters(panel);
 
         String[] columnNames = dataList.getEntityFields().toArray(new String[0]);
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; 
+                return false;
             }
         };
         JTable table = new JTable(tableModel);
@@ -96,14 +100,14 @@ public class MainWindowView implements ViewInterface {
             deleteButton.setEnabled(selectedRowCount > 0); 
         });
 
-	addButton.addActionListener(e -> {
-        StudentCreateController studentCreateController = new StudentCreateController(this.controller);
-        StudentFormModal modal = new StudentFormModal();
-        modal.controller = studentCreateController;
-        modal.create(null, "Ñîçäàòü íîâóþ çàïèñü");
+        addButton.addActionListener(e -> {
+            StudentCreateController studentCreateController = new StudentCreateController(this.controller);
+            StudentFormModal modal = new StudentFormModal();
+            modal.controller = studentCreateController;
+            modal.create(null, "Creating");
         });
 
-                editButton.addActionListener(e -> {
+        editButton.addActionListener(e -> {
             StudentUpdateController studentUpdateController = new StudentUpdateController(this.controller);
             StudentFormModal modal = new StudentFormModal();
             modal.controller = studentUpdateController;
@@ -112,41 +116,9 @@ public class MainWindowView implements ViewInterface {
                 int id = (int) tableModel.getValueAt(selectedRow, 0);
                 Student student = studentUpdateController.getStudentById(id);
                 if (student == null) {
-                    showError("Update!");
+                    showError("Adding!");
                 }
-                modal.create(student, "Update");
-            }
-        });
-
-        refreshInfo(tableModel);
-
-        addButton.addActionListener(e -> {
-            showStudentForm(null, "Добавить студента", student -> {
-                int id = studentDB.addStudent(student);
-                if (id > 0) {
-                    JOptionPane.showMessageDialog(panel, "Студент добавлен!");
-                    refreshInfo(tableModel);
-                } else {
-                    JOptionPane.showMessageDialog(panel, "Ошибка при добавлении студента.");
-                }
-            });
-        });
-
-        editButton.addActionListener(e -> {
-            int selectedRow = table.getSelectedRow();
-            if (selectedRow >= 0) {
-                int id = (int) tableModel.getValueAt(selectedRow, 0);
-                Student student = studentDB.getStudentById(id);
-                if (student != null) {
-                    showStudentForm(student, "Редактировать студента", updatedStudent -> {
-                        if (studentDB.updateStudent(updatedStudent)) {
-                            JOptionPane.showMessageDialog(panel, "Студент обновлен!");
-                            refreshInfo(tableModel);
-                        } else {
-                            JOptionPane.showMessageDialog(panel, "Ошибка при обновлении студента.");
-                        }
-                    });
-                }
+                modal.create(student, "Cant add");
             }
         });
 
@@ -155,48 +127,46 @@ public class MainWindowView implements ViewInterface {
             if (selectedRows.length > 0) {
                 int confirm = JOptionPane.showConfirmDialog(
                         panel,
-                        "Вы уверены, что хотите удалить выбранных студентов?",
-                        "Подтверждение удаления",
+                        "Are you shure?",
+                        "deleted",
                         JOptionPane.YES_NO_OPTION
                 );
 
                 if (confirm == JOptionPane.YES_OPTION) {
                     boolean success = true;
 
-                    // Удаляем студентов по ID
                     for (int i = selectedRows.length - 1; i >= 0; i--) {
                         int id = (int) tableModel.getValueAt(selectedRows[i], 0);
-                        if (!studentDB.deleteStudent(id)) {
+                        if (!controller.deleteStudent(id)) {
                             success = false;
                         }
                     }
 
                     if (success) {
-                        JOptionPane.showMessageDialog(panel, "Выбранные студенты удалены!");
+                        JOptionPane.showMessageDialog(panel, "Deleted!");
                     } else {
-                        JOptionPane.showMessageDialog(panel, "Не удалось удалить некоторых студентов.", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(panel, "Cant delete.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
-
-                    refreshInfo(tableModel);
+                    controller.refresh_data();
                 }
             }
         });
 
         nextPageButton.addActionListener(e -> {
             currentPage++;
-            refreshInfo(tableModel);
+            controller.refresh_data(PAGE_SIZE, currentPage, getCurrentFilter());
         });
 
         prevPageButton.addActionListener(e -> {
             if (currentPage > 1) {
                 currentPage--;
-                refreshInfo(tableModel);
+                controller.refresh_data(PAGE_SIZE, currentPage, getCurrentFilter());
             }
         });
 
-        refreshButton.addActionListener(e -> refreshInfo(tableModel));
+        refreshButton.addActionListener(e -> controller.refresh_data(PAGE_SIZE, currentPage, null));
 
-        buttonPanel.add(pageInfoLabel);
+        buttonPanel.add(pageInfoLabel); 
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
@@ -219,10 +189,32 @@ public class MainWindowView implements ViewInterface {
     private void set_table_params() {
         List<String> newColumnNames = dataList.getEntityFields();
         tableModel.setColumnIdentifiers(newColumnNames.toArray());
+
+        int lastPage = dataList.getPagination().getTotalPages();
+
+        if (lastPage < currentPage) {
+            currentPage = lastPage;
+            controller.refresh_data(PAGE_SIZE, currentPage, getCurrentFilter());
+            return;
+        }
+
+        updatePageControls(lastPage);
+    }
+
+    private void updatePageControls(int lastPage) {
+
+        pageInfoLabel.setText("Page: " + currentPage + " / " + lastPage);
+
+        prevPageButton.setEnabled(currentPage > 1);
+        nextPageButton.setEnabled(currentPage < lastPage);
+    }
+
+    private StudentFilter getCurrentFilter() {
+        return null;
     }
 
     private void set_table_data() {
-        tableModel.setRowCount(0);
+        tableModel.setRowCount(0); 
 
         List<Student_short> students = dataList.toList();
 
@@ -235,10 +227,11 @@ public class MainWindowView implements ViewInterface {
             });
         }
     }
+
     public void showError(String message) {
-        JDialog dialog = new JDialog((Frame) null, "Îøèáêà", true);
+        JDialog dialog = new JDialog((Frame) null, "Error", true);
         dialog.setSize(400, 300);
         dialog.setLayout(new GridLayout(7, 2));
-        JOptionPane.showMessageDialog(dialog, "Ïðîèçîøëà íåïðåäâèäåííàÿ îøèáêà: " + message, "Îøèáêà", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(dialog, "Error: " + message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
